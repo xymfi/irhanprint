@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Quotation System - E-Print 100% Product Lineup</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0d0e12',
+                        cardbg: '#16181e',
+                        cardborder: '#262933',
+                        inputbg: '#0f1015',
+                        brandblue: '#3b82f6',
+                        brandbluehover: '#2563eb'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0e12;
+            color: #e2e8f0;
+        }
+        select, input[type="text"], input[type="number"] {
+            background-color: #0f1015;
+            border: 1px solid #2a2d39;
+            color: #f1f5f9;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+        }
+        select:focus, input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        input[type="checkbox"] {
+            accent-color: #3b82f6;
+            width: 1.1rem;
+            height: 1.1rem;
+            cursor: pointer;
+        }
+        @media print {
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 20px !important;
+                border: none !important;
+                background: white !important;
+                color: black !important;
+            }
+            .print-card {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+            }
+            .print-text-dark {
+                color: black !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
+
+    <div class="max-w-6xl w-full mx-auto">
+        
+        <!-- Header Utama -->
+        <header class="mb-6 no-print">
+            <div class="flex items-center space-x-2">
+                <input type="text" id="companyNameInput" value="Nama Syarikat Anda" class="bg-transparent border-none text-2xl md:text-3xl font-bold text-white focus:ring-0 p-0 hover:bg-cardbg rounded px-2 transition-all cursor-pointer" title="Klik untuk tukar nama syarikat">
+                <i class="fa-solid fa-pen-to-square text-gray-500 text-sm"></i>
+            </div>
+            <p class="text-gray-400 text-sm mt-1">Sistem Sebut Harga Automatik (Terangkum 100% Katalog E-Print + 20% Markup).</p>
+        </header>
+
+        <!-- Main Layout Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- LEFT COLUMN: Form Controls (Input Spesifikasi) -->
+            <div class="lg:col-span-7 bg-cardbg border border-cardborder rounded-2xl p-5 md:p-6 shadow-xl no-print">
+                
+                <!-- 1. Spesifikasi -->
+                <section class="mb-6">
+                    <h2 class="text-lg font-semibold text-white mb-4 flex items-center justify-between">
+                        <span>1. Spesifikasi</span>
+                        <span class="text-xs bg-blue-900/40 text-blue-400 px-2.5 py-1 rounded-full border border-blue-500/30">100% E-Print Katalog</span>
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <!-- Dropdown Kategori -->
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1 font-medium">Kategori Utama</label>
+                            <select id="kategoriSelect" class="w-full p-2.5 text-sm font-medium">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+
+                        <!-- Dropdown Produk -->
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1 font-medium">Produk Specific</label>
+                            <select id="produkSelect" class="w-full p-2.5 text-sm">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+
+                        <!-- Dropdown Kertas / Material -->
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1 font-medium">Kertas / Material</label>
+                            <select id="kertasSelect" class="w-full p-2.5 text-sm">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+
+                        <!-- Dropdown Saiz -->
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1 font-medium">Saiz / Format</label>
+                            <select id="saizSelect" class="w-full p-2.5 text-sm">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+
+                        <!-- Dropdown Kuantiti -->
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1 font-medium">Kuantiti (Pcs / Set)</label>
+                            <select id="kuantitiSelect" class="w-full p-2.5 text-sm font-semibold">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-cardborder my-6">
+
+                <!-- 2. Finishing (Pilihan) -->
+                <section class="mb-6">
+                    <h2 class="text-lg font-semibold text-white mb-3">2. Finishing (Pilihan)</h2>
+                    <div class="space-y-3 text-sm">
+                        
+                        <!-- Lamination (Matt/Gloss) -->
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" id="finishLamination" class="rounded">
+                                <span class="text-gray-300">Lamination (Matt / Gloss)</span>
+                            </label>
+                            <select id="laminationType" class="w-36 p-1 text-xs">
+                                <option value="double">2 Sisi (Front & Back)</option>
+                                <option value="single">1 Sisi (Front Only)</option>
+                            </select>
+                        </div>
+
+                        <!-- Bucu Bulat -->
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" id="finishRoundCorner" class="rounded">
+                            <span class="text-gray-300">Bucu Bulat (Round Corner 4mm/6mm)</span>
+                        </label>
+
+                        <!-- Creasing / Garisan Lipat -->
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" id="finishCreasing" class="rounded">
+                                <span class="text-gray-300">Garisan Lipat (Creasing Line)</span>
+                            </label>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs text-gray-400">Bil. garisan:</span>
+                                <input type="number" id="creasingQty" value="1" min="1" max="10" class="w-12 p-1 text-center text-xs">
+                            </div>
+                        </div>
+
+                        <!-- Lubang (Punch Hole) -->
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" id="finishPunchHole" class="rounded">
+                            <span class="text-gray-300">Tebuk Lubang (Punch Hole 3mm-6mm)</span>
+                        </label>
+
+                        <!-- Spot UV -->
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" id="finishSpotUV" class="rounded">
+                            <span class="text-gray-300">Spot UV (1 Sisi)</span>
+                        </label>
+
+                        <!-- Hot Stamping -->
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" id="finishHotStamping" class="rounded">
+                                <span class="text-gray-300">Hot Stamping (Foil Emas/Perak)</span>
+                            </label>
+                            <select id="stampingType" class="w-28 p-1 text-xs">
+                                <option value="gold">Gold Foil</option>
+                                <option value="silver">Silver Foil</option>
+                            </select>
+                        </div>
+
+                        <!-- Raised Foil -->
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" id="finishRaisedFoil" class="rounded">
+                            <span class="text-gray-300">3D Raised Foil (Emas / Perak)</span>
+                        </label>
+
+                    </div>
+                </section>
+
+                <hr class="border-cardborder my-6">
+
+                <!-- 3. Maklumat Pelanggan -->
+                <section>
+                    <h2 class="text-lg font-semibold text-white mb-3">3. Maklumat Pelanggan</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1 font-medium">Nama / Syarikat Pelanggan</label>
+                            <input type="text" id="custName" placeholder="Contoh: En. Razak / Syarikat Bina Sdn Bhd" class="w-full p-2.5 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1 font-medium">No. Telefon WhatsApp</label>
+                            <input type="text" id="custPhone" placeholder="Contoh: 60123456789" class="w-full p-2.5 text-sm">
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Quotation Preview Card -->
+            <div class="lg:col-span-5 print-container">
+                <div class="bg-cardbg border border-cardborder rounded-2xl p-5 md:p-6 shadow-xl sticky top-6 print-card">
+                    
+                    <!-- Header Sebut Harga -->
+                    <div class="flex justify-between items-start border-b border-cardborder pb-4 mb-4">
+                        <div>
+                            <span id="previewCompany" class="text-xs font-semibold uppercase tracking-wider text-blue-400 block mb-1">NAMA SYARIKAT ANDA</span>
+                            <h3 class="text-xl font-bold text-white print-text-dark">Sebut Harga <span id="quotationNo" class="text-gray-400 font-medium text-base">#Q261103-209</span></h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-400 block">Tarikh:</span>
+                            <span id="quotationDate" class="text-xs font-medium text-gray-300 print-text-dark">03/11/2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Client Info (If provided) -->
+                    <div id="clientDisplay" class="mb-4 hidden bg-inputbg p-3 rounded-lg border border-cardborder print-card">
+                        <p class="text-xs text-gray-400">Kepada:</p>
+                        <p id="dispName" class="text-sm font-semibold text-white print-text-dark">-</p>
+                        <p id="dispPhone" class="text-xs text-gray-400 print-text-dark">-</p>
+                    </div>
+
+                    <!-- Table Header -->
+                    <div class="flex justify-between text-xs text-gray-400 font-semibold border-b border-cardborder pb-2 mb-3">
+                        <span>Penerangan Item</span>
+                        <span>Harga (RM)</span>
+                    </div>
+
+                    <!-- Detail Spesifikasi Barang -->
+                    <div class="space-y-3 mb-6">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h4 id="dispProduk" class="text-sm font-semibold text-gray-100 print-text-dark">Kad Nama – Standard</h4>
+                                <span id="dispBasePrice" class="text-sm font-bold text-gray-200 print-text-dark">0.00</span>
+                            </div>
+                            <p id="dispSubDetails" class="text-xs text-gray-400 mt-1 print-text-dark">-</p>
+                        </div>
+
+                        <!-- Finishing Details Listing -->
+                        <div id="finishingList" class="space-y-1.5 pl-3 border-l-2 border-blue-500/30 text-xs text-gray-300 print-text-dark">
+                            <!-- Selected finishing populated dynamically -->
+                        </div>
+                    </div>
+
+                    <hr class="border-cardborder my-4">
+
+                    <!-- Breakdown & Total -->
+                    <div class="space-y-1 mb-4 text-xs text-gray-400">
+                        <div class="flex justify-between">
+                            <span>Kadar Markup Ditambah:</span>
+                            <span class="text-green-400 font-semibold">+20% Sahaja</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-lg font-bold text-white print-text-dark">Jumlah Jualan</span>
+                        <span id="dispTotal" class="text-2xl font-extrabold text-blue-400 print-text-dark">RM 0.00</span>
+                    </div>
+
+                    <!-- Syarat Sebut Harga -->
+                    <p class="text-xs text-gray-400 mb-6 leading-relaxed print-text-dark">
+                        * Harga tertakluk kepada 20% mark-up pengurusan.<br>
+                        * Sah selama 7 hari. Belum termasuk penghantaran & cukai (jika ada).
+                    </p>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 no-print">
+                        <button onclick="window.print()" class="bg-brandblue hover:bg-brandbluehover text-white text-sm font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/20">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak / PDF</span>
+                        </button>
+
+                        <button onclick="sendWhatsApp()" class="border border-cardborder bg-transparent hover:bg-cardborder text-white text-sm font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2">
+                            <i class="fa-brands fa-whatsapp text-green-400 text-base"></i>
+                            <span>Hantar WhatsApp</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JavaScript Engine & Comprehensive E-Print Database -->
+    <script>
+        // Database 100% Produk E-Print Malaysia (Semua Kategori & Spesifikasi Kos e-print)
+        const eprintComprehensiveDatabase = [
+            {
+                category: "1. Kad Nama (Name Cards)",
+                products: [
+                    {
+                        name: "Kad Nama Standard (Matt Lamination)",
+                        papers: ["Art Card 260gsm", "Art Card 310gsm", "Art Card 360gsm", "Ivory Card 230gsm"],
+                        sizes: ["90mm x 54mm (Standard)", "90mm x 50mm", "54mm x 54mm (Square)"],
+                        pricing: { "100": 13.00, "200": 18.50, "300": 24.00, "500": 34.00, "1000": 55.00, "2000": 98.00 }
+                    },
+                    {
+                        name: "Kad Nama Spot UV / Hot Stamping",
+                        papers: ["Art Card 260gsm + Matt", "Art Card 310gsm + Matt"],
+                        sizes: ["90mm x 54mm (Standard)"],
+                        pricing: { "100": 28.00, "200": 38.00, "300": 48.00, "500": 65.00, "1000": 105.00 }
+                    },
+                    {
+                        name: "Kad Nama Linen / Fine Textured / Kraft",
+                        papers: ["Linen Card 240gsm", "Kraf Card 280gsm", "Metallic Ice White 250gsm"],
+                        sizes: ["90mm x 54mm (Standard)"],
+                        pricing: { "100": 22.00, "200": 32.00, "300": 42.00, "500": 60.00, "1000": 98.00 }
+                    }
+                ]
+            },
+            {
+                category: "2. Flyer & Brochure",
+                products: [
+                    {
+                        name: "Flyer A4 (Simili / Art Paper)",
+                        papers: ["Art Paper 105gsm", "Art Paper 128gsm", "Art Paper 157gsm", "Simili Paper 80gsm"],
+                        sizes: ["A4 (210 x 297 mm)", "A5 (148 x 210 mm)", "DL (99 x 210 mm)"],
+                        pricing: { "250": 88.00, "500": 115.00, "1000": 165.00, "2000": 270.00, "5000": 490.00 }
+                    },
+                    {
+                        name: "Brochure Lipat (Folded Brochure)",
+                        papers: ["Art Paper 128gsm", "Art Paper 157gsm", "Art Card 230gsm"],
+                        sizes: ["A4 2-Fold (Half Fold)", "A4 3-Fold (Trifold / Z-Fold)"],
+                        pricing: { "250": 105.00, "500": 135.00, "1000": 195.00, "2000": 320.00, "5000": 580.00 }
+                    }
+                ]
+            },
+            {
+                category: "3. Poster (Small & Large Format)",
+                products: [
+                    {
+                        name: "Poster Printing (A3 / A2 / A1 / A0)",
+                        papers: ["Art Paper 157gsm", "Art Card 230gsm", "Synthetic Paper (Waterproof)", "Photo Paper 220gsm"],
+                        sizes: ["A3 (297 x 420 mm)", "A2 (420 x 594 mm)", "A1 (594 x 841 mm)", "A0 (841 x 1189 mm)"],
+                        pricing: { "1": 15.00, "5": 45.00, "10": 75.00, "50": 220.00, "100": 380.00 }
+                    }
+                ]
+            },
+            {
+                category: "4. Sticker & Label",
+                products: [
+                    {
+                        name: "Sticker Label (Mirrorkote / Kraft / PVC / Transparent)",
+                        papers: ["Mirrorkote Paper Sticker", "White PP Synthetic (Kalis Air)", "Transparent PVC", "Kraft Paper Sticker"],
+                        sizes: ["A4 Sheet Cut", "30mm x 30mm (Die-Cut)", "40mm x 40mm (Die-Cut)", "50mm x 50mm (Die-Cut)"],
+                        pricing: { "100": 26.00, "300": 42.00, "500": 58.00, "1000": 85.00, "3000": 190.00, "5000": 280.00 }
+                    }
+                ]
+            },
+            {
+                category: "5. Sampul Surat & Money Packet",
+                products: [
+                    {
+                        name: "Sampul Surat Syarikat (Envelopes)",
+                        papers: ["Simili Paper 80gsm", "Simili Paper 100gsm", "Peel & Seal Simili 100gsm"],
+                        sizes: ["DL Size (4 x 9 in) - Window/Non-Window", "C5 Size (6 x 9 in)", "C4 Size (9 x 12 in)"],
+                        pricing: { "500": 140.00, "1000": 210.00, "2000": 360.00, "5000": 720.00 }
+                    },
+                    {
+                        name: "Sampul Duit Raya / Money Packet",
+                        papers: ["Art Paper 128gsm", "Craft Paper 120gsm", "Textured Pearl 120gsm"],
+                        sizes: ["Portrait (80mm x 155mm)", "Landscape (155mm x 80mm)"],
+                        pricing: { "500": 220.00, "1000": 350.00, "2000": 620.00, "5000": 1350.00 }
+                    }
+                ]
+            },
+            {
+                category: "6. Resit & Buku Bill (NCR Form)",
+                products: [
+                    {
+                        name: "Buku Bill / Resit NCR Carbonless",
+                        papers: ["NCR 2 Ply (Top White / Bottom Color)", "NCR 3 Ply (Top / Middle / Bottom)", "NCR 4 Ply"],
+                        sizes: ["A4 Size", "A5 Size", "A6 Size / DL Size"],
+                        pricing: { "10": 120.00, "20": 190.00, "30": 260.00, "50": 380.00, "100": 680.00 }
+                    }
+                ]
+            },
+            {
+                category: "7. Banner & Bunting",
+                products: [
+                    {
+                        name: "Banner / Bunting Outdoors",
+                        papers: ["Tarpaulin 380gsm High-Res", "Tarpaulin 440gsm Heavy Duty", "Yupo Synthetic Banner"],
+                        sizes: ["2ft x 5ft (Standard Bunting)", "2ft x 6ft", "3ft x 6ft", "Custom Banner (sqft base)"],
+                        pricing: { "1": 18.00, "2": 32.00, "5": 75.00, "10": 135.00, "20": 240.00 }
+                    }
+                ]
+            },
+            {
+                category: "8. Folder Syarikat (Presentation Folder)",
+                products: [
+                    {
+                        name: "Folder Dokument Syarikat",
+                        papers: ["Art Card 260gsm + Lamination", "Art Card 310gsm + Lamination", "Art Card 360gsm"],
+                        sizes: ["A4 Single Pocket", "A4 Double Pocket"],
+                        pricing: { "100": 290.00, "200": 420.00, "300": 530.00, "500": 720.00, "1000": 1150.00 }
+                    }
+                ]
+            },
+            {
+                category: "9. Kalendar (Calendar)",
+                products: [
+                    {
+                        name: "Kalendar Meja / Kalendar Dinding",
+                        papers: ["Desk Calendar (Art Card 230gsm + Stand)", "Wall Calendar Racing Horse (Header Card)"],
+                        sizes: ["7 x 6 in (Desk)", "8.5 x 6 in (Desk)", "Small/Medium/Large Wall"],
+                        pricing: { "50": 310.00, "100": 480.00, "200": 780.00, "500": 1650.00 }
+                    }
+                ]
+            },
+            {
+                category: "10. Booklet & Katalog (Booklet)",
+                products: [
+                    {
+                        name: "Booklet / Catalog (Saddle Stitch / Perfect Bind)",
+                        papers: ["Cover 260gsm + Content 128gsm", "Content 157gsm All Pages"],
+                        sizes: ["A4 Booklet (8 - 32 Muka Surat)", "A5 Booklet (8 - 32 Muka Surat)"],
+                        pricing: { "50": 210.00, "100": 320.00, "200": 540.00, "500": 1100.00 }
+                    }
+                ]
+            },
+            {
+                category: "11. Cop Getah (Rubber Stamps)",
+                products: [
+                    {
+                        name: "Rubber Stamp / Self-Inking Stamp",
+                        papers: ["Self-Inking Flash Stamp", "Traditional Wood Handle Stamp"],
+                        sizes: ["Standard Chop (10x45mm)", "Company Chop Round (38mm)", "Address Chop (22x58mm)"],
+                        pricing: { "1": 18.00, "2": 32.00, "5": 72.00, "10": 130.00 }
+                    }
+                ]
+            },
+            {
+                category: "12. Kotak Pembungkusan (Packaging Box)",
+                products: [
+                    {
+                        name: "Kotak Produk Custom (Box Packaging)",
+                        papers: ["Art Card 350gsm + Matt", "Craft Box 300gsm", "Corrugated Box E-Flute"],
+                        sizes: ["Custom Small Box (Tukang)", "Medium Product Box"],
+                        pricing: { "100": 240.00, "300": 420.00, "500": 590.00, "1000": 880.00 }
+                    }
+                ]
+            }
+        ];
+
+        // Kadar Kos Finishing e-print
+        const finishingBaseCosts = {
+            laminationDouble: 6.00,
+            laminationSingle: 3.50,
+            roundCorner: 5.00,
+            creasingPerLine: 4.00,
+            punchHole: 3.50,
+            spotUV: 22.00,
+            hotStamping: 28.00,
+            raisedFoil: 35.00
+        };
+
+        const MARKUP_FACTOR = 1.20; // 20% Mark Up Automatik
+
+        // DOM Elements
+        const kategoriSelect = document.getElementById('kategoriSelect');
+        const produkSelect = document.getElementById('produkSelect');
+        const kertasSelect = document.getElementById('kertasSelect');
+        const saizSelect = document.getElementById('saizSelect');
+        const kuantitiSelect = document.getElementById('kuantitiSelect');
+
+        const finishLamination = document.getElementById('finishLamination');
+        const laminationType = document.getElementById('laminationType');
+        const finishRoundCorner = document.getElementById('finishRoundCorner');
+        const finishCreasing = document.getElementById('finishCreasing');
+        const creasingQty = document.getElementById('creasingQty');
+        const finishPunchHole = document.getElementById('finishPunchHole');
+        const finishSpotUV = document.getElementById('finishSpotUV');
+        const finishHotStamping = document.getElementById('finishHotStamping');
+        const stampingType = document.getElementById('stampingType');
+        const finishRaisedFoil = document.getElementById('finishRaisedFoil');
+
+        const custName = document.getElementById('custName');
+        const custPhone = document.getElementById('custPhone');
+        const companyNameInput = document.getElementById('companyNameInput');
+
+        // Init App
+        window.addEventListener('DOMContentLoaded', () => {
+            initCategoryDropdown();
+            generateQuotationNumber();
+            setDateToday();
+            calculateAll();
+
+            // Event Listeners for Changes
+            kategoriSelect.addEventListener('change', () => {
+                updateProductDropdown();
+                calculateAll();
+            });
+
+            produkSelect.addEventListener('change', () => {
+                updateSubSpecsDropdowns();
+                calculateAll();
+            });
+
+            [kertasSelect, saizSelect, kuantitiSelect, finishLamination, laminationType, finishRoundCorner, finishCreasing, creasingQty, finishPunchHole, finishSpotUV, finishHotStamping, stampingType, finishRaisedFoil].forEach(el => {
+                el.addEventListener('change', calculateAll);
+                el.addEventListener('input', calculateAll);
+            });
+
+            [custName, custPhone, companyNameInput].forEach(el => {
+                el.addEventListener('input', updateClientAndCompanyDetails);
+            });
+        });
+
+        function initCategoryDropdown() {
+            kategoriSelect.innerHTML = '';
+            eprintComprehensiveDatabase.forEach((cat, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = cat.category;
+                kategoriSelect.appendChild(opt);
+            });
+            updateProductDropdown();
+        }
+
+        function updateProductDropdown() {
+            const catIndex = kategoriSelect.value;
+            const categoryObj = eprintComprehensiveDatabase[catIndex];
+            
+            produkSelect.innerHTML = '';
+            categoryObj.products.forEach((prod, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = prod.name;
+                produkSelect.appendChild(opt);
+            });
+            updateSubSpecsDropdowns();
+        }
+
+        function updateSubSpecsDropdowns() {
+            const catIndex = kategoriSelect.value;
+            const prodIndex = produkSelect.value;
+            const prodObj = eprintComprehensiveDatabase[catIndex].products[prodIndex];
+
+            // Kertas
+            kertasSelect.innerHTML = '';
+            prodObj.papers.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p;
+                opt.textContent = p;
+                kertasSelect.appendChild(opt);
+            });
+
+            // Saiz
+            saizSelect.innerHTML = '';
+            prodObj.sizes.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                saizSelect.appendChild(opt);
+            });
+
+            // Kuantiti
+            kuantitiSelect.innerHTML = '';
+            Object.keys(prodObj.pricing).forEach(q => {
+                const opt = document.createElement('option');
+                opt.value = q;
+                opt.textContent = `${q} unit / set`;
+                kuantitiSelect.appendChild(opt);
+            });
+        }
+
+        function generateQuotationNumber() {
+            const dateStr = new Date().toISOString().slice(2, 10).replace(/-/g, '');
+            const randomNum = Math.floor(100 + Math.random() * 900);
+            document.getElementById('quotationNo').innerText = `#Q${dateStr}-${randomNum}`;
+        }
+
+        function setDateToday() {
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const yyyy = today.getFullYear();
+            document.getElementById('quotationDate').innerText = `${dd}/${mm}/${yyyy}`;
+        }
+
+        function calculateAll() {
+            const catIndex = kategoriSelect.value;
+            const prodIndex = produkSelect.value;
+            const prodObj = eprintComprehensiveDatabase[catIndex].products[prodIndex];
+
+            const selectedQtyKey = kuantitiSelect.value;
+            const baseCostPrice = prodObj.pricing[selectedQtyKey] || 0;
+
+            // Base price calculation with 20% Markup
+            const baseSellingPrice = baseCostPrice * MARKUP_FACTOR;
+
+            // Display Base Specs
+            document.getElementById('dispProduk').innerText = prodObj.name;
+            document.getElementById('dispSubDetails').innerText = `${kertasSelect.value} · ${selectedQtyKey} unit · ${saizSelect.value}`;
+            document.getElementById('dispBasePrice').innerText = baseSellingPrice.toFixed(2);
+
+            // Calculate Finishings with 20% Markup
+            let finishingSellingTotal = 0;
+            const finishingContainer = document.getElementById('finishingList');
+            finishingContainer.innerHTML = '';
+
+            if (finishLamination.checked) {
+                const isDouble = laminationType.value === 'double';
+                const cost = isDouble ? finishingBaseCosts.laminationDouble : finishingBaseCosts.laminationSingle;
+                const price = cost * MARKUP_FACTOR;
+                finishingSellingTotal += price;
+                addFinishingRow(finishingContainer, `Lamination (${isDouble ? '2 Sisi' : '1 Sisi'})`, price);
+            }
+
+            if (finishRoundCorner.checked) {
+                const price = finishingBaseCosts.roundCorner * MARKUP_FACTOR;
+                finishingSellingTotal += price;
+                addFinishingRow(finishingContainer, 'Bucu Bulat (Round Corner)', price);
+            }
+
+            if (finishCreasing.checked) {
+                const lines = parseInt(creasingQty.value) || 1;
+                const price = (finishingBaseCosts.creasingPerLine * lines) * MARKUP_FACTOR;
+                finishingSellingTotal += price;
+                addFinishingRow(finishingContainer, `Garisan Lipat (${lines} line)`, price);
+            }
+
+            if (finishPunchHole.checked) {
+                const price = finishingBaseCosts.punchHole * MARKUP_FACTOR;
+                finishingSellingTotal += price;
+                addFinishingRow(finishingContainer, 'Tebuk Lubang (Punch Hole)', price);
+            }
+
+            if (finishSpotUV.checked) {
+                const price = finishingBaseCosts.spotUV * MARKUP_FACTOR;
+                finishingSellingTotal += price;
+                addFinishingRow(finishingContainer, 'Spot UV (1 Sisi)', price);
+            }
+
+            if (finishHotStamping.checked) {
+                const foil = stampingType.value === 'gold' ? 'Gold Foil' : 'Silver Foil';
+                const price = finishingBaseCosts.hotStamping * MARKUP_FACTOR;
+                finishingSellingTotal += price;
+                addFinishingRow(finishingContainer, `Hot Stamping (${foil})`, price);
+            }
+
+            if (finishRaisedFoil.checked) {
+                const price = finishingBaseCosts.raisedFoil * MARKUP_FACTOR;
+                finishingSellingTotal += price;
+                addFinishingRow(finishingContainer, '3D Raised Foil (Spot)', price);
+            }
+
+            // Total Price Calculation
+            const grandTotalSelling = baseSellingPrice + finishingSellingTotal;
+            document.getElementById('dispTotal').innerText = `RM ${grandTotalSelling.toFixed(2)}`;
+        }
+
+        function addFinishingRow(container, label, price) {
+            const div = document.createElement('div');
+            div.className = 'flex justify-between items-center';
+            div.innerHTML = `
+                <span>+ ${label}</span>
+                <span class="font-medium">+RM ${price.toFixed(2)}</span>
+            `;
+            container.appendChild(div);
+        }
+
+        function updateClientAndCompanyDetails() {
+            const nameVal = custName.value.trim();
+            const phoneVal = custPhone.value.trim();
+            const compVal = companyNameInput.value.trim() || 'NAMA SYARIKAT ANDA';
+
+            document.getElementById('previewCompany').innerText = compVal.toUpperCase();
+
+            const clientDisplay = document.getElementById('clientDisplay');
+            if (nameVal || phoneVal) {
+                clientDisplay.classList.remove('hidden');
+                document.getElementById('dispName').innerText = nameVal || '-';
+                document.getElementById('dispPhone').innerText = phoneVal || '-';
+            } else {
+                clientDisplay.classList.add('hidden');
+            }
+        }
+
+        function sendWhatsApp() {
+            const company = companyNameInput.value.trim() || 'Syarikat Percetakan';
+            const qNo = document.getElementById('quotationNo').innerText;
+            const dateStr = document.getElementById('quotationDate').innerText;
+            const prod = document.getElementById('dispProduk').innerText;
+            const sub = document.getElementById('dispSubDetails').innerText;
+            const total = document.getElementById('dispTotal').innerText;
+            const client = custName.value.trim() || 'Pelanggan';
+            const phone = custPhone.value.trim();
+
+            let msg = `Salam ${client},\n\n`;
+            msg += `Berikut ialah *SEBUT HARGA RASMI (${qNo})* daripada *${company}*:\n\n`;
+            msg += `📌 *Item:* ${prod}\n`;
+            msg += `📋 *Spesifikasi:* ${sub}\n`;
+            
+            const finishingRows = document.querySelectorAll('#finishingList div span:first-child');
+            if (finishingRows.length > 0) {
+                msg += `✨ *Finishing:* `;
+                let list = [];
+                finishingRows.forEach(el => list.push(el.innerText.replace('+ ', '')));
+                msg += list.join(', ') + `\n`;
+            }
+
+            msg += `\n💰 *JUMLAH KESELURUHAN: ${total}*\n\n`;
+            msg += `Tarikh: ${dateStr}\n`;
+            msg += `*Nota:* Sah selama 7 hari. Belum termasuk kos penghantaran.\n\n`;
+            msg += `Sila balas mesej ini jika anda bersetuju untuk proceed tempahan. Terima kasih!`;
+
+            const encodedMsg = encodeURIComponent(msg);
+            let waUrl = `https://wa.me/`;
+            if (phone) {
+                let cleanPhone = phone.replace(/[^0-9]/g, '');
+                if (cleanPhone.startsWith('0')) {
+                    cleanPhone = '6' + cleanPhone;
+                }
+                waUrl += `${cleanPhone}?text=${encodedMsg}`;
+            } else {
+                waUrl += `?text=${encodedMsg}`;
+            }
+
+            window.open(waUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
